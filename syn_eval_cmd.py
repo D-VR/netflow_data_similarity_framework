@@ -30,8 +30,7 @@ if __name__=='__main__':
     ds_1 = ds_1.split('/')[-1].split('.')[0]
     ds_2 = ds_2.split('/')[-1].split('.')[0]
 
-    #save_path = '../../Datasets/Queensland_NetFlow/results_raw/exp_'+experiment_id+'/'+ds_1+'_'+ds_2+'/' 
-    save_path = save_path+'/results_raw/exp_'+experiment_id+'/'+ds_1+'_'+ds_2+'/' 
+    save_path = save_path+'/'+experiment_id+'/similarity_raw/'+ds_1+'_'+ds_2+'/' 
     makedirs(save_path, exist_ok=True)
     
     print('START...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))

@@ -25,7 +25,6 @@ def read_csv_data(path, skip_errors=False, index_col=None, header=0, nrows=None,
 
 root_prefix = '../../Datasets/Queensland_NetFlow/NetFlow_Benchmark/'
 datasets  = [
-                #'NF-BoT-IoT', 
                 'NF-CSE-CIC-IDS2018',
                 'NF-ToN-IoT',
                 'NF-UNSW-NB15']

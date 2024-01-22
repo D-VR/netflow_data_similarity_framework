@@ -1,5 +1,5 @@
 import argparse
-from src import syntax_check
+from src import aggregate_results
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("-l", "--load_path", required=True)
@@ -12,4 +12,4 @@ if __name__ == '__main__':
     store_path = args.store_path
     dataset_id = args.ds_id
 
-    syntax_check.remove_syntax_erros_files(load_path, store_path, dataset_id)
+    aggregate_results.aggregate_raw_results(load_path, store_path, dataset_id)
