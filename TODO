@@ -1,7 +1,4 @@
-- add results aggregation into csv for each exp_dir
-- check requirements.txt
 - Test for each py file
-- License - BSD-3-Clause license? Based on importet projects
 - packaging for pip
 - upload test pypi
 
