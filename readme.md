@@ -1,7 +1,7 @@
 # Requirements
-This framework requires NetFlows in the binary NetFlow format nProbe https://www.ntop.org/products/netflow/nprobe/ 
+This framework requires NetFlows in the binary NetFlow format [nProbe](https://www.ntop.org/products/netflow/nprobe/) 
 
-e.g. NetFlow V1 Datasets: https://staff.itee.uq.edu.au/marius/NIDS_datasets/
+e.g. [Queensland Machine Learning-Based NIDS Datasets NetFlow V1](https://staff.itee.uq.edu.au/marius/NIDS_datasets/)
 
 # NetFlow Format
 
