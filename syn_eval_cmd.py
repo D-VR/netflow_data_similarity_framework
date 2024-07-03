@@ -43,7 +43,7 @@ if __name__=='__main__':
         for key in task_dict.keys():
             task_dict[key].to_csv(save_path+key+'.csv')
         #quit()
-        #print('TASK END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
+        print('TASK END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
         
 
     def run_discriminator():
@@ -54,7 +54,7 @@ if __name__=='__main__':
         for key in disc_dict.keys():
             disc_dict[key].to_csv(save_path+key+'.csv')
         #quit()
-        #print('DISCRIMINATOR END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
+        print('DISCRIMINATOR END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
         
 
     def run_attribute():
@@ -63,7 +63,7 @@ if __name__=='__main__':
         #print(corr_dict)
         for key in att_dict.keys():
             att_dict[key].to_csv(save_path+key+'.csv')
-        #print('ATTRIBUTE END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
+        print('ATTRIBUTE END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
         
 
     def run_correlation():
@@ -72,7 +72,7 @@ if __name__=='__main__':
         #print(corr_dict)
         for key in corr_dict.keys():
             corr_dict[key].to_csv(save_path+key+'.csv')
-        #print('CORRELATION END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
+        print('CORRELATION END...', datetime.datetime.now().strftime("%m-%d-%Y_%H-%M-%S"))
         
 
     run_attribute()

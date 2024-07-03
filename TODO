@@ -1,7 +1,8 @@
 - Test for each py file
 - packaging for pip
 - upload test pypi
-
+- combine results
+- plotting of results
 
 ### TEST EXAMPLES ###
 
