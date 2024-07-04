@@ -15,6 +15,9 @@ python3 syn_aggregate_cmd.py --load_path "test_data/04-real/similarity_raw" --ds
 
 python3 syntax_chk_cmd.py --load_path '../../Datasets/Queensland_NetFlow/synthetic/gpt2_data_clean/NF-UNSW-NB15_step-10000.csv' --ds_id 04-gpt2 --store_path "test_data/"
 
+python3 syntax_chk_aggregate_cmd.py --load_path 'test_data/04-gpt2/error_counts/' --store_path "test_data/04-gpt2_aggregate_syntax.csv"
+
+
 python3 syn_eval_cmd.py --ds1 "../../Datasets/Queensland_NetFlow/samples/real/NF-UNSW-NB15_0.csv" --ds2 "test_data/04-gpt2/checked_data/NF-UNSW-NB15_step-10000.csv" --expid 04-gpt2 --store_path "test_data/" 
 
 python3 syn_aggregate_cmd.py --load_path "test_data/04-gpt2/similarity_raw" --ds_id 04-gpt --store_path "test_data/04-gpt2_aggregate.csv"

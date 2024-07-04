@@ -209,6 +209,29 @@ def remove_syntax_erros_files(load_path, store_path, model):
     error_counts.to_csv(prefix_error_counts+file, header=True, index=False)
 
 
+def split_ds_file(df):
+        print(df.file)
+        df['ds'] = df['file'].str.split('/').str[-1].str.split('_').str[0]
+        print(df.ds)
+        if any('real' in s for s in list(df.model.unique())):
+            df['step'] = 0
+        else:
+            df['step'] = df['file'].str.split('/').str[-1].str.split('_').str[1].str.split('-').str[1].str.split('.').str[0].astype(int)
+        #df = df.set_index('step')
+        return df
+
+def aggreate_error_counts(path, path_out):
+    file_list = []
+    for file in listdir(path):
+        print(file)
+        df = pd.read_csv(path+file, header=0)
+        print(df)
+        df = split_ds_file(df)
+        file_list.append(df.copy())
+    df_all = pd.concat(file_list, axis=0)
+    df_all.to_csv(path_out, header=True, index=False)
+
+
 if __name__ == '__main__':
    
     for model in ['gpt2', 'wgan', 'wganbin']:
