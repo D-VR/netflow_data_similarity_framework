@@ -197,7 +197,7 @@ def split_ds_file(df):
         return df.sort_index()
 
         
-def plot_history_mean_metric(df_real, df_synthetic, store_path, df_error):
+def plot_history_mean_metric(df_real, df_synthetic, store_path):
     def calc_mean(df_results):
         mean_columns = ['Jensen-Shannon Div. Mean', 
                         #'Wasserstein Dist. Mean x10', 
@@ -272,30 +272,30 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path, df_error):
     #print(df_synthetic[df_synthetic['sample_1']=='step-0500'])
     #TODO combine similarity with error flows rate..
 
-    df_error['ds_1'] = df_error['ds']
-    df_error=df_error.reset_index()
-    df_error['sample_1'] = 0#df_error['step']
-    df_error['Error_Flows'] = df_error['Flows']/10000
+    #df_error['ds_1'] = df_error['ds']
+    #df_error=df_error.reset_index()
+    #df_error['sample_1'] = 0#df_error['step']
+    df_synthetic['Error_Flows'] = df_synthetic['Error_Flows']/10000
     #print(df_error)
     #print(df_error.columns)
-    df_error = df_error[['ds_1', 'sample_1', 'model', 'Error_Flows']]
-    print('Error')
-    print(df_error)
-    print(df_error.columns)
+    #df_error = df_error[['ds_1', 'sample_1', 'model', 'Error_Flows']]
+    #print('Error')
+    #print(df_error)
+    #print(df_error.columns)
     #df_error=df_error.drop(index=list(range(500,10000, 1000))) #drop intermediate steps
     #print(df_error)
 
     #df_synthetic['sample_1'] = df_synthetic['sample_1'].str.split('-').str[1].astype(int) #remove step- prefix
     #still necessary
-    print("Synthetic")
-    print(df_synthetic[['ds_1', 'model', 'sample_1']])
-    df_synthetic = df_synthetic.merge(df_error, how='inner', left_on=['ds_1', 'model', 'sample_1'], right_on=['ds_1', 'model', 'sample_1'])
+    #print("Synthetic")
+    #print(df_synthetic[['ds_1', 'model', 'sample_1']])
+    #df_synthetic = df_synthetic.merge(df_error, how='inner', left_on=['ds_1', 'model', 'sample_1'], right_on=['ds_1', 'model', 'sample_1'])
 
-    df_real['Error_Flows'] = 0 #real data have no syntax errors
-    print("Synthetic merge")
-    print(df_synthetic[['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model', 'Error_Flows']])
-    print(df_synthetic.columns)
-    quit()
+    #df_real['Error_Flows'] = 0 #real data have no syntax errors
+    #print("Synthetic merge")
+    #print(df_synthetic[['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model', 'Error_Flows']])
+    #print(df_synthetic.columns)
+    #quit()
 
 
     df_real = calc_mean(df_real)
@@ -372,9 +372,9 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path, df_error):
                 val_max_other = df_real_stats_other.loc['max', col]
                 #print(val_25)
                 #fig = plt.figure(figsize=(8,8))
-                tmp = df_synthetic_filter[['sample_1', col, col+'_std', 'model']]
+                tmp = df_synthetic_filter[['sample_2', col, col+'_std', 'model']]
                 print(tmp)
-                tmp.set_index('sample_1', inplace=True)
+                tmp.set_index('sample_2', inplace=True)
                 print(tmp)
                 
                 axs[axs_num].tick_params(left = True, right = False , labelleft = True ,
@@ -450,9 +450,24 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path, df_error):
             #plt.legend()
             #plt.show()
             save_title = ds_group+'__all'
-            plt.savefig(store_path+'mean_history_threshold_'+save_title+'-'+str(10000)+'.pdf')
+            plt.savefig(store_path+'mean_history_threshold_'+save_title+'-'+str(10000)+'.png')
     #add errors? normalize values to 0-1 shall we add weights?
     benchmark_line_plot_history(df_real, df_synthetic, store_path)
+
+
+def combine_raw_error(df, df_error):
+    df_error.drop(columns=['file'], inplace=True)
+    df_error.rename(columns={'ds':'ds_2', 'step':'sample_2'}, inplace=True)
+    if df['sample_2'].dtype != np.int64:
+        #remove step-
+        df['sample_2'] = df['sample_2'].astype(str).str[5:].astype(np.int64)
+    #merge raw results + syntax checks for each (real, wgan, gpt) individually
+    print(df.columns)
+    print(df[['ds_2', 'model', 'sample_2']])
+    print(df_error.columns)
+    print(df_error[['ds_2', 'model', 'sample_2']])
+    df = df.merge(df_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
+    return df
 
 
 if __name__ == '__main__':
@@ -569,11 +584,11 @@ if __name__ == '__main__':
                     'xgb_task_tr-ds2_tst-ds1_f1-micro': 'XGB Task TRTS F1-Score-Micro', 
                     'xgb_task_tr-ds1_tst-ds2_f1-weighted': 'XGB Task TSTR F1-Score-Weighted',
                     'xgb_task_tr-ds2_tst-ds1_f1-weighted': 'XGB Task TRTS F1-Score-Weighted',
+
+                    'Flows' : 'Error_Flows'
     }
 
-    df_results_synthtic = pd.concat([df_results_gpt, df_results_wgan], axis=0, ignore_index=True)
-    df_results_real.rename(columns=rename_dict, inplace=True)
-    df_results_synthtic.rename(columns=rename_dict, inplace=True)
+    
     store_path = prefix_plot
     #benchmark_line_plot_raw_all(df_results_real, df_results_synthtic, store_path)
     #benchmark_line_plot_raw_hist(df_results_real, df_results_synthtic, store_path)
@@ -581,6 +596,11 @@ if __name__ == '__main__':
 
     #TODO combine error counts to aggregation of results
     #get error counts
+    path_real = 'test_data/04-real_aggregate_syntax.csv'
+    df_real_error = pd.read_csv(path_real, header=0)
+    #df_gpt_error = split_ds_file(df_gpt_error)
+    print(df_real_error)
+
     path_gpt = 'test_data/04-gpt2_aggregate_syntax.csv'
     df_gpt_error = pd.read_csv(path_gpt, header=0)
     #df_gpt_error = split_ds_file(df_gpt_error)
@@ -591,27 +611,41 @@ if __name__ == '__main__':
     #df_wgan_error = split_ds_file(df_wgan_error)
     print(df_wgan_error)
 
+    #combine raw+errors
+    df_results_real = combine_raw_error(df_results_real, df_real_error)
+    print(df_results_real)
+
+    df_results_gpt = combine_raw_error(df_results_gpt, df_gpt_error)
+    print(df_results_gpt)
+
+    df_results_wgan = combine_raw_error(df_results_wgan, df_wgan_error)
+    print(df_results_wgan)
+
     #df_gpt_error['model'] = 'gpt2'
     #df_wgan_error['model'] = 'wgan-binary'
 
-    df_combi_error = pd.concat([df_gpt_error, df_wgan_error], axis=0).reset_index()
+    #df_combi_error = pd.concat([df_gpt_error, df_wgan_error], axis=0).reset_index()
+
+    df_results_synthtic = pd.concat([df_results_gpt, df_results_wgan], axis=0, ignore_index=True)
+    df_results_real.rename(columns=rename_dict, inplace=True)
+    df_results_synthtic.rename(columns=rename_dict, inplace=True)
 
     print('real')
     print(df_results_real)
     print('synthetic')
     print(df_results_synthtic)
-    print('error')
-    df_combi_error.drop(columns=['file'], inplace=True)
-    df_combi_error.rename(columns={'ds':'ds_2', 'step':'sample_2'}, inplace=True)
-    df_combi_error['sample_2'] = 'step-' + df_combi_error['sample_2'].astype(str)
-    print(df_combi_error)
+    #print('error')
+    #df_combi_error.drop(columns=['file'], inplace=True)
+    #df_combi_error.rename(columns={'ds':'ds_2', 'step':'sample_2'}, inplace=True)
+    #df_combi_error['sample_2'] = 'step-' + df_combi_error['sample_2'].astype(str)
+    #print(df_combi_error)
 
 
     #merge raw results + syntax checks for each (real, wgan, gpt) individually
-    df_results_synthtic = df_results_synthtic.merge(df_combi_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
-    print(df_results_synthtic)
+    #df_results_synthtic = df_results_synthtic.merge(df_combi_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
+    #print(df_results_synthtic)
     
-    #plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_', df_combi_error)
+    plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_')
     '''
 
 
