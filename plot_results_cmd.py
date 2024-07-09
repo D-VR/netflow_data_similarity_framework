@@ -470,6 +470,185 @@ def combine_raw_error(df, df_error):
     return df
 
 
+def create_heatmap(df, title, figsize=(20,5), save_path=''):
+    #plt.pcolor(df)
+    #plt.yticks(np.arange(0.5, len(df.index), 1), df.index)
+    #plt.xticks(np.arange(0.5, len(df.columns), 1), df.columns)
+    #fig = plt.figure(figsize=figsize)
+    fig = plt.figure(figsize=figsize)
+
+    sns.set(font_scale=0.7)
+    #axs = sns.heatmap(df, annot=True, fmt=".2f", cmap='Greens', linewidth=1, vmin=-1, vmax=1)
+    axs = sns.heatmap(df, annot=True, fmt=".2f", cmap='RdBu', linewidth=1, vmin=-1, vmax=1)
+
+    fig.add_axes(axs)
+    axs.set_xticklabels(axs.get_xticklabels(), rotation=45, horizontalalignment='right')
+    #axs.set_yticklabels(axs.get_yticklabels(), rotation=45, horizontalalignment='right')
+    #plt.xticks(rotation=45, horizontalalignment='right')
+    #plt.yticks(rotation=45, horizontalalignment='right')
+
+    #plt.title(title,fontsize=20)
+    plt.tight_layout()
+    #plt.show()
+    fig.savefig(save_path+'correlation'+title+'.png')
+
+def metric_correlation_all(df_results, save_path):
+    invert_cols = ['IF Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'IF Discriminator TRTS FPR', 
+                        'OCSVM Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'OCSVM Discriminator TRTS FPR', 
+                        #'Task TSTR F1-Score-Macro',
+                        #'Task TRTS F1-Score-Macro',
+                        #'Task TSTR F1-Score-Micro',
+                        #'Task TRTS F1-Score-Micro', 
+                        'IF Task TSTR F1-Score-Weighted',
+                        'IF Task TRTS F1-Score-Weighted',
+                        'OCSVM Task TSTR F1-Score-Weighted',
+                        'OCSVM Task TRTS F1-Score-Weighted',
+                        'XGB Task TSTR F1-Score-Weighted',
+                        'XGB Task TRTS F1-Score-Weighted',
+        ]
+        
+    data_metrics = ['Jensen-Shannon Div. Mean', 
+                        #'Wasserstein Dist. Mean x10', 
+                        'Pearson MAE',
+                        'Correlation Ratio MAE', 
+                        'Theils U MAE', 
+                        
+                        'IF Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'IF Discriminator TRTS FPR', 
+                        'OCSVM Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'OCSVM Discriminator TRTS FPR',  ]
+                    
+    domain_metrics = [ 'IF Task TSTR F1-Score-Weighted',
+                        'IF Task TRTS F1-Score-Weighted',
+                        'OCSVM Task TSTR F1-Score-Weighted',
+                        'OCSVM Task TRTS F1-Score-Weighted',
+                        'XGB Task TSTR F1-Score-Weighted',
+                        'XGB Task TRTS F1-Score-Weighted',
+                        #'Error_Flows'
+                        ]
+                
+    #invert values
+    df_results[invert_cols] = 1- df_results[invert_cols]
+    #df_results['Error_Flows'] = 0
+
+    #df_results['Data Similarity Score'] = df_results[data_metrics].mean(axis=1)
+    #df_results['Domain Similarity Score'] = df_results[domain_metrics].mean(axis=1)
+
+    #df_results = df_results[['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model', 'Data Similarity Score', 'Domain Similarity Score']]
+    
+    #filter ds
+    df_filter = df_results
+
+
+    ### plotting ###
+
+    name_list = df_filter.columns.drop(['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model'])
+    
+    df_corr_data = df_filter[data_metrics].corr()
+    df_corr_domain = df_filter[domain_metrics].corr()
+    df_corr = df_filter[data_metrics+domain_metrics].corr()
+
+    print(df_corr_data)
+    print(df_corr_domain)
+
+    #create_heatmap(df_corr_data, 'Correlation Data Metrics', figsize=(5,5), save_path=save_path)
+    #create_heatmap(df_corr_domain, 'Correlation Domain Metrics', figsize=(5,5), save_path=save_path)
+    create_heatmap(df_corr, 'Metrics Correlation - all DS', figsize=(7,6), save_path=save_path+'all_')
+
+
+def plot_boxplot_real_mean_metrics(df_results, save_path):
+    '''
+    invert_cols = ['Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                    'Discriminator TRTS FPR', 
+                    #'Task TSTR F1-Score-Macro',
+                    #'Task TRTS F1-Score-Macro',
+                    #'Task TSTR F1-Score-Micro',
+                    #'Task TRTS F1-Score-Micro', 
+                    'Task TSTR F1-Score-Weighted',
+                    'Task TRTS F1-Score-Weighted',]
+        
+    data_metrics = ['Jensen-Shannon Div. Mean', 
+                    #'Wasserstein Dist. Mean x10', 
+                    'Pearson MAE',
+                    'Correlation Ratio MAE', 
+                    'Theils U MAE', 
+                    
+                    'Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                    'Discriminator TRTS FPR', ]
+                
+    domain_metrics = [ 'Task TSTR F1-Score-Weighted',
+                    'Task TRTS F1-Score-Weighted',
+                    'Error_Flows'
+                    ]
+    
+    '''
+
+    invert_cols = ['IF Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'IF Discriminator TRTS FPR', 
+                        'OCSVM Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'OCSVM Discriminator TRTS FPR', 
+                        #'Task TSTR F1-Score-Macro',
+                        #'Task TRTS F1-Score-Macro',
+                        #'Task TSTR F1-Score-Micro',
+                        #'Task TRTS F1-Score-Micro', 
+                        'IF Task TSTR F1-Score-Weighted',
+                        'IF Task TRTS F1-Score-Weighted',
+                        'OCSVM Task TSTR F1-Score-Weighted',
+                        'OCSVM Task TRTS F1-Score-Weighted',
+                        'XGB Task TSTR F1-Score-Weighted',
+                        'XGB Task TRTS F1-Score-Weighted',
+        ]
+        
+    data_metrics = ['Jensen-Shannon Div. Mean', 
+                        #'Wasserstein Dist. Mean x10', 
+                        'Pearson MAE',
+                        'Correlation Ratio MAE', 
+                        'Theils U MAE', 
+                        
+                        'IF Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'IF Discriminator TRTS FPR', 
+                        'OCSVM Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
+                        'OCSVM Discriminator TRTS FPR',  ]
+                    
+    domain_metrics = [ 'IF Task TSTR F1-Score-Weighted',
+                        'IF Task TRTS F1-Score-Weighted',
+                        'OCSVM Task TSTR F1-Score-Weighted',
+                        'OCSVM Task TRTS F1-Score-Weighted',
+                        'XGB Task TSTR F1-Score-Weighted',
+                        'XGB Task TRTS F1-Score-Weighted',
+                        'Error_Flows']
+                
+    #invert values
+    df_results[invert_cols] = 1- df_results[invert_cols]
+    df_results['Error_Flows'] = 0
+
+    df_results['Data Dissimilarity Score'] = df_results[data_metrics].mean(axis=1)
+    df_results['Domain Dissimilarity Score'] = df_results[domain_metrics].mean(axis=1)
+
+    df_results = df_results[['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model', 'Data Dissimilarity Score', 'Domain Dissimilarity Score']]
+
+    ### plotting ###
+
+    name_list = df_results.columns.drop(['ds_1', 'sample_1', 'ds_2', 'sample_2', 'model'])
+    
+    for value in name_list:
+        df_results.boxplot(column=[value], by=['ds_1', 'ds_2'], rot=0, figsize=(3,3), vert=False)#, sharey=False) figsize=(8,3)
+        #df_results.boxplot(column=[value], by=['ds_2', 'ds_1'], rot=0, figsize=(8,5), vert=False)#, sharey=False) figsize=(8,3)
+
+        plt.subplots_adjust(left=0.35)
+        #fig = plt.figure()
+        
+        plt.title('')
+        plt.suptitle('')
+        plt.xlabel('')
+        plt.ylabel('')
+        plt.tight_layout()
+        #plt.show()
+        plt.savefig(save_path+'_boxplot_'+value+'.png')
+    #plt.tight_layout()
+    #plt.show()
 if __name__ == '__main__':
     '''
     ### aggregate raw results into single files ###
@@ -645,15 +824,11 @@ if __name__ == '__main__':
     #df_results_synthtic = df_results_synthtic.merge(df_combi_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
     #print(df_results_synthtic)
     
-    plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_')
-    '''
+    #plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_')
+ 
 
 
-    #quit()
-
-    #ds_dict_name = { 'NF-CSE-CIC-IDS2018':'A',
-    #             'NF-ToN-IoT': 'B',
-    #             'NF-UNSW-NB15': 'C'}
+    
     ds_dict_name = { 'NF-CSE-CIC-IDS2018':'CC',
                  'NF-ToN-IoT': 'TI',
                  'NF-UNSW-NB15': 'UN'}
@@ -662,9 +837,8 @@ if __name__ == '__main__':
         df_results_real['ds_2'] = df_results_real['ds_2'].str.replace(key, ds_dict_name[key])
     
     print(df_results_real)
-    plot_boxplot_real(df_results_real.copy(), save_plot_real)
+    #plot_boxplot_real(df_results_real.copy(), save_plot_real)
 
     plot_boxplot_real_mean_metrics(df_results_real.copy(), save_plot_real+'scores_')
-    metric_correlation_all(df_results_real.copy(), save_plot_real+'metrics_')
-    metric_correlation(df_results_real.copy(), save_plot_real+'metrics_')
-'''
+    #metric_correlation_all(df_results_real.copy(), save_plot_real+'metrics_')
+    #metric_correlation(df_results_real.copy(), save_plot_real+'metrics_')
