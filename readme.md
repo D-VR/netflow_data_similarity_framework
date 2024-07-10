@@ -54,7 +54,7 @@ requires NetFlow in Queensland binary netflow format
 `python3 syntax_chk_cmd.py --load_path '../../Datasets/Queensland_NetFlow/synthetic/gpt2_data_clean/NF-UNSW-NB15_step-10000.csv' --ds_id 04-gpt2 --store_path "test_data/"`
 
 ### Similarity measures raw
-`python3 syn_eval_cmd.py --ds1 "../../Datasets/Queensland_NetFlow/samples/real/NF-UNSW-NB15_0.csv" --ds2 "test_data/04-gpt2/checked_data/NF-UNSW-NB15_step-10000.csv" --expid 04-gpt2 --store_path "test_data/" `
+`python3 syn_eval_cmd.py --ds1 "test_data/04-gpt2/checked_data/NF-UNSW-NB15_step-10000.csv" --ds2 "../../Datasets/Queensland_NetFlow/samples/real/NF-UNSW-NB15_0.csv" --expid 04-gpt2 --store_path "test_data/" `
 
 ### Aggregate results into csv file
 `python3 syn_aggregate_cmd.py --load_path "test_data/04-gpt2/similarity_raw" --ds_id 04-gpt --store_path "test_data/04-gpt2_aggregate.csv"`
