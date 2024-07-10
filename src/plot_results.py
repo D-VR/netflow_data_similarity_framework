@@ -372,9 +372,9 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
                 val_max_other = df_real_stats_other.loc['max', col]
                 #print(val_25)
                 #fig = plt.figure(figsize=(8,8))
-                tmp = df_synthetic_filter[['sample_2', col, col+'_std', 'model']]
+                tmp = df_synthetic_filter[['sample_1', col, col+'_std', 'model']]
                 print(tmp)
-                tmp.set_index('sample_2', inplace=True)
+                tmp.set_index('sample_1', inplace=True)
                 print(tmp)
                 
                 axs[axs_num].tick_params(left = True, right = False , labelleft = True ,
@@ -457,16 +457,16 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
 
 def combine_raw_error(df, df_error):
     df_error.drop(columns=['file'], inplace=True)
-    df_error.rename(columns={'ds':'ds_2', 'step':'sample_2'}, inplace=True)
-    if df['sample_2'].dtype != np.int64:
+    df_error.rename(columns={'ds':'ds_1', 'step':'sample_1'}, inplace=True)
+    if df['sample_1'].dtype != np.int64:
         #remove step-
-        df['sample_2'] = df['sample_2'].astype(str).str[5:].astype(np.int64)
+        df['sample_1'] = df['sample_1'].astype(str).str[5:].astype(np.int64)
     #merge raw results + syntax checks for each (real, wgan, gpt) individually
     print(df.columns)
-    print(df[['ds_2', 'model', 'sample_2']])
+    print(df[['ds_1', 'model', 'sample_1']])
     print(df_error.columns)
-    print(df_error[['ds_2', 'model', 'sample_2']])
-    df = df.merge(df_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
+    print(df_error[['ds_1', 'model', 'sample_1']])
+    df = df.merge(df_error, how='inner', left_on=['ds_1', 'model', 'sample_1'], right_on=['ds_1', 'model', 'sample_1'])
     return df
 
 
@@ -801,7 +801,7 @@ def plot_results(prefix):
 
     df_results_wgan = combine_raw_error(df_results_wgan, df_wgan_error)
     print(df_results_wgan)
-
+    #quit()
     #df_gpt_error['model'] = 'gpt2'
     #df_wgan_error['model'] = 'wgan-binary'
 
@@ -826,7 +826,7 @@ def plot_results(prefix):
     #df_results_synthtic = df_results_synthtic.merge(df_combi_error, how='inner', left_on=['ds_2', 'model', 'sample_2'], right_on=['ds_2', 'model', 'sample_2'])
     #print(df_results_synthtic)
     
-    #plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_')
+    plot_history_mean_metric(df_results_real.copy(), df_results_synthtic.copy(), store_path+'mean_')
  
 
 
@@ -842,7 +842,7 @@ def plot_results(prefix):
     #plot_boxplot_real(df_results_real.copy(), save_plot_real)
 
     plot_boxplot_real_mean_metrics(df_results_real.copy(), save_plot_real+'scores_')
-    #metric_correlation_all(df_results_real.copy(), save_plot_real+'metrics_')
+    metric_correlation_all(df_results_real.copy(), save_plot_real+'metrics_')
     #metric_correlation(df_results_real.copy(), save_plot_real+'metrics_')
 
 
