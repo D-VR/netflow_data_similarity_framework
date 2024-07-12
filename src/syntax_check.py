@@ -45,6 +45,21 @@ def check_number_float(value):
         return False
     
 #TODO check protocol & flags
+#def check_tcp_flags(protocol, flags):
+#    UDP = 17
+#    TCP = 6
+#    ICMP = 1
+#    IGMP = 2
+#    try:
+#        if int(flags) > 0:
+#            if protocol == TCP:
+#                return True
+#            else:
+#                return False
+#        else:
+#            return True
+#    except:
+#        False
 def check_tcp_flags(protocol, flags):
     UDP = 17
     TCP = 6
@@ -52,10 +67,10 @@ def check_tcp_flags(protocol, flags):
     IGMP = 2
     try:
         if int(flags) > 0:
-            if protocol == TCP:
-                return True
-            else:
+            if protocol == UDP:
                 return False
+            else:
+                return True
         else:
             return True
     except:

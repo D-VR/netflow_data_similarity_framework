@@ -269,13 +269,14 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
         return df_results
     #print("START")
     #print(df_synthetic)
+    #quit()
     #print(df_synthetic[df_synthetic['sample_1']=='step-0500'])
     #TODO combine similarity with error flows rate..
 
     #df_error['ds_1'] = df_error['ds']
     #df_error=df_error.reset_index()
     #df_error['sample_1'] = 0#df_error['step']
-    df_synthetic['Error_Flows'] = df_synthetic['Error_Flows']/10000
+    #df_synthetic['Error_Flows'] = df_synthetic['Error_Flows']/10000
     #print(df_error)
     #print(df_error.columns)
     #df_error = df_error[['ds_1', 'sample_1', 'model', 'Error_Flows']]
@@ -300,12 +301,12 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
 
     df_real = calc_mean(df_real)
     #print(df_synthetic)
-    #print(df_synthetic[df_synthetic['sample_1']==500])
-
+    #print(df_synthetic[df_synthetic['sample_1']==1000])
+    #quit()
     df_synthetic = calc_mean(df_synthetic)
     #print("DF_SYNTETIC")
     #print(df_synthetic)
-    #print(df_synthetic[df_synthetic['sample_1']==500])
+    #print(df_synthetic[df_synthetic['sample_1']==1000])
 
     #quit()
     #df_synthetic['error_flows'] = np.where( ( (df_synthetic['ds_1']==df_error['ds']) & (df_synthetic['model']==df_error['model']) & (df_synthetic['sample_1']==df_error.index)), df_error['Flows'] )
@@ -462,6 +463,10 @@ def combine_raw_error(df, df_error):
         #remove step-
         df['sample_1'] = df['sample_1'].astype(str).str[5:].astype(np.int64)
     #merge raw results + syntax checks for each (real, wgan, gpt) individually
+    df_error = df_error.rename(columns={'Flows':'Error_Flows'})
+    df_error=df_error.reset_index()
+    df_error = df_error[['ds_1', 'sample_1', 'model', 'Error_Flows']]
+    df_error['Error_Flows'] = df_error['Error_Flows']/10000
     print(df.columns)
     print(df[['ds_1', 'model', 'sample_1']])
     print(df_error.columns)
@@ -793,17 +798,18 @@ def plot_results(prefix):
     print(df_wgan_error)
 
     #combine raw+errors
-    df_results_real = combine_raw_error(df_results_real, df_real_error)
+    #df_results_real = combine_raw_error(df_results_real, df_real_error)
+    df_results_real['Error_Flows'] = 0
     print(df_results_real)
 
     df_results_gpt = combine_raw_error(df_results_gpt, df_gpt_error)
     print(df_results_gpt)
-
+    
     df_results_wgan = combine_raw_error(df_results_wgan, df_wgan_error)
     print(df_results_wgan)
     #quit()
-    #df_gpt_error['model'] = 'gpt2'
-    #df_wgan_error['model'] = 'wgan-binary'
+    df_results_gpt['model'] = 'gpt2'
+    df_results_wgan['model'] = 'wgan-binary'
 
     #df_combi_error = pd.concat([df_gpt_error, df_wgan_error], axis=0).reset_index()
 
