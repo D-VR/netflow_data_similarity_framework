@@ -308,6 +308,9 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
     #print(df_synthetic)
     #print(df_synthetic[df_synthetic['sample_1']==1000])
 
+    df_real.to_csv(store_path+'metrics_real.csv')
+    df_synthetic.to_csv(store_path+'metrics_synthetic.csv')
+
     #quit()
     #df_synthetic['error_flows'] = np.where( ( (df_synthetic['ds_1']==df_error['ds']) & (df_synthetic['model']==df_error['model']) & (df_synthetic['sample_1']==df_error.index)), df_error['Flows'] )
     #df_synthetic['error_flows'] = np.where( ( (df_synthetic['ds_1']==df_error['ds']) & (df_synthetic['model']==df_error['model']) & (df_synthetic['sample_1']==df_error.index)), df_error['Flows'] )
@@ -451,7 +454,7 @@ def plot_history_mean_metric(df_real, df_synthetic, store_path):
             #plt.legend()
             #plt.show()
             save_title = ds_group+'__all'
-            plt.savefig(store_path+'mean_history_threshold_'+save_title+'-'+str(10000)+'.png')
+            plt.savefig(store_path+'mean_history_threshold_'+save_title+'-'+str(10000)+'.pdf')
     #add errors? normalize values to 0-1 shall we add weights?
     benchmark_line_plot_history(df_real, df_synthetic, store_path)
 
@@ -657,39 +660,7 @@ def plot_boxplot_real_mean_metrics(df_results, save_path):
 
 #if __name__ == '__main__':
 def plot_results(prefix):
-    '''
-    ### aggregate raw results into single files ###
-    prefix = '../../Datasets/Queensland_NetFlow/results_raw/'
-    experiment_id = "exp_04-real"
-    load_path_real = prefix+experiment_id+'/'
-    save_path_real=  prefix+experiment_id+'_results_raw.csv'
-    #aggregate_raw_results(load_path_real, save_path_real, model='real')
-     
-    prefix = '../../Datasets/Queensland_NetFlow/results_raw/'
-    #experiment_id = "exp_01-gpt2"
-    experiment_id = "exp_05-gpt2_history"
-
-    load_path_gpt = prefix+experiment_id+'/'
-    save_path_gpt=  prefix+experiment_id+'_results_raw.csv'
-    #aggregate_raw_results(load_path_gpt, save_path_gpt, model='gpt2')   
-    '''
-    '''
-    prefix = '../../Datasets/Queensland_NetFlow/results_raw/'
-    #experiment_id = "exp_01-wgan"
-    experiment_id = "exp_01-wgan_history"
-    load_path_wgan = prefix+experiment_id+'/'
-    save_path_wgan =  prefix+experiment_id+'_results_raw.csv'
-    #aggregate_raw_results(load_path_wgan, save_path_wgan, model='wgan')
-    '''
-    '''
-    #prefix = '../../Datasets/Queensland_NetFlow/results_raw/'
-    prefix='test_data/'
-    #experiment_id = "exp_01-wgan"
-    experiment_id = "exp_05-wganbin_history"
-    load_path_wgan = prefix+experiment_id+'/'
-    save_path_wgan =  prefix+experiment_id+'_results_raw.csv'
-    aggregate_raw_results(load_path_wgan, save_path_wgan, model='wgan-binary')
-    '''
+    
     ### load data
     #prefix='test_data/' #set via cmd
     save_path_real = prefix+'04-real_aggregate.csv'
@@ -782,10 +753,10 @@ def plot_results(prefix):
 
     #TODO combine error counts to aggregation of results
     #get error counts
-    path_real = prefix+'04-real_aggregate_syntax.csv'
-    df_real_error = pd.read_csv(path_real, header=0)
+    #path_real = prefix+'04-real_aggregate_syntax.csv'
+    #df_real_error = pd.read_csv(path_real, header=0)
     #df_gpt_error = split_ds_file(df_gpt_error)
-    print(df_real_error)
+    #print(df_real_error)
 
     path_gpt = prefix+'04-gpt2_aggregate_syntax.csv'
     df_gpt_error = pd.read_csv(path_gpt, header=0)
