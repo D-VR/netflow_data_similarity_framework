@@ -498,7 +498,7 @@ def create_heatmap(df, title, figsize=(20,5), save_path=''):
     #plt.title(title,fontsize=20)
     plt.tight_layout()
     #plt.show()
-    fig.savefig(save_path+'correlation'+title+'.png')
+    fig.savefig(save_path+'correlation'+title+'.pdf')
 
 def metric_correlation_all(df_results, save_path):
     invert_cols = ['IF Discriminator TSTR FPR', #calc 1-metric for value where 0-1, 0 is better
@@ -654,7 +654,7 @@ def plot_boxplot_real_mean_metrics(df_results, save_path):
         plt.ylabel('')
         plt.tight_layout()
         #plt.show()
-        plt.savefig(save_path+'_boxplot_'+value+'.png')
+        plt.savefig(save_path+'_boxplot_'+value+'.pdf')
     #plt.tight_layout()
     #plt.show()
 
