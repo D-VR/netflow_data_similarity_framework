@@ -659,13 +659,21 @@ def plot_boxplot_real_mean_metrics(df_results, save_path):
     #plt.show()
 
 #if __name__ == '__main__':
-def plot_results(prefix):
+#def plot_results(prefix):
+def plot_results(prefix, save_path_real, save_path_syn1, path_syntax_syn1, save_path_syn2, path_syntax_syn2):
+
     
     ### load data
     #prefix='test_data/' #set via cmd
-    save_path_real = prefix+'04-real_aggregate.csv'
-    save_path_gpt = prefix+'04-gpt2_aggregate.csv'
-    save_path_wgan = prefix+'04-wganbin_aggregate.csv'
+    #save_path_real = prefix+'04-real_aggregate.csv'#
+    
+    #save_path_syn1 = prefix+'04-gpt2_aggregate.csv'#
+    #save_path_syn2 = prefix+'04-wganbin_aggregate.csv'#
+    
+    #path_syntax_syn1 = prefix+'04-gpt2_aggregate_syntax.csv'#
+    #path_syntax_syn2 = prefix+'/04-wganbin_aggregate_syntax.csv'#
+
+
 
     ### plot data ###
 
@@ -691,8 +699,8 @@ def plot_results(prefix):
 
     
     save_plot_real = prefix_plot+'results_real_'
-    df_results_gpt = pd.read_csv(save_path_gpt, header=0)
-    df_results_wgan = pd.read_csv(save_path_wgan, header=0)
+    df_results_gpt = pd.read_csv(save_path_syn1, header=0)
+    df_results_wgan = pd.read_csv(save_path_syn2, header=0)
     
     df_results_gpt = remove_error_rows(df_results_gpt) #necessary? corr measures can be negative
     df_results_wgan = remove_error_rows(df_results_wgan)
@@ -758,13 +766,13 @@ def plot_results(prefix):
     #df_gpt_error = split_ds_file(df_gpt_error)
     #print(df_real_error)
 
-    path_gpt = prefix+'04-gpt2_aggregate_syntax.csv'
-    df_gpt_error = pd.read_csv(path_gpt, header=0)
+    #path_gpt = prefix+'04-gpt2_aggregate_syntax.csv'#
+    df_gpt_error = pd.read_csv(path_syntax_syn1, header=0)
     #df_gpt_error = split_ds_file(df_gpt_error)
     print(df_gpt_error)
     
-    path_wgan = prefix+'/04-wganbin_aggregate_syntax.csv'
-    df_wgan_error = pd.read_csv(path_wgan, header=0)
+    #path_wgan = prefix+'/04-wganbin_aggregate_syntax.csv'#
+    df_wgan_error = pd.read_csv(path_syntax_syn2, header=0)
     #df_wgan_error = split_ds_file(df_wgan_error)
     print(df_wgan_error)
 
@@ -779,8 +787,8 @@ def plot_results(prefix):
     df_results_wgan = combine_raw_error(df_results_wgan, df_wgan_error)
     print(df_results_wgan)
     #quit()
-    df_results_gpt['model'] = 'gpt2'
-    df_results_wgan['model'] = 'wgan-binary'
+    #df_results_gpt['model'] = 'gpt2'#
+    #df_results_wgan['model'] = 'wgan-binary'#
 
     #df_combi_error = pd.concat([df_gpt_error, df_wgan_error], axis=0).reset_index()
 

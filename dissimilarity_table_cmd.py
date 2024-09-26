@@ -16,7 +16,9 @@ def calc_metrics(load_path, syntax_path, store_path):
     df_syntax = df_syntax[['Flows', 'model','ds','step']]
     df_syntax['Flows'] = df_syntax['Flows']/10000
     df_syntax.columns = ['error_flows', 'model','ds_1','sample_1']
-    df_syntax['sample_1'] = 'sample-' + df_syntax['sample_1'].astype(str)
+    #df_syntax['sample_1'] = 'sample-' + df_syntax['sample_1'].astype(str)
+    df_syntax['sample_1'] = 'step-' + df_syntax['sample_1'].astype(str)
+
 
     print(df_syntax)
     print(df_results)

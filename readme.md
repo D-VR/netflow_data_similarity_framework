@@ -58,3 +58,9 @@ requires NetFlow in Queensland binary netflow format
 
 ### Aggregate results into csv file
 `python3 syn_aggregate_cmd.py --load_path "test_data/04-gpt2/similarity_raw" --ds_id 04-gpt --store_path "test_data/04-gpt2_aggregate.csv"`
+
+
+### Dissimlarity
+`python3 dissimilarity_table_cmd.py --load_path "test_data/04-gpt2_aggregate.csv" --syntax_path "test_data/04-gpt2_aggregate_syntax.csv" --store_path "test_data/04-gpt2_dissimilarity.csv"`
+
+`python3 plot_results_cmd.py --prefix "test_data/" --save_path_real "test_data/04-real_aggregate.csv" --save_path_syn1 "test_data/04-gpt2_aggregate.csv" --path_syntax_syn1 "test_data/04-gpt2_aggregate_syntax.csv" --save_path_syn2 "test_data/04-wganbin_aggregate.csv" --path_syntax_syn2 "test_data/04-wganbin_aggregate_syntax.csv"`
